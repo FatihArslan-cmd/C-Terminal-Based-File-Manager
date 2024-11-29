@@ -7,6 +7,14 @@
 #include <string.h>  // For strcpy, strcmp
 #include "file_manager.h"
 
+#ifdef _WIN32
+#include <direct.h>  // For _mkdir on Windows
+#include <io.h>      // For _unlink on Windows
+#else
+#include <sys/types.h>
+#include <sys/stat.h>
+#endif
+
 // Function to delete folder and its contents recursively
 void delete_folder(const char *folder_name) {
     DIR *dir = opendir(folder_name);
@@ -31,7 +39,11 @@ void delete_folder(const char *folder_name) {
             if (S_ISDIR(stat_buf.st_mode)) {
                 delete_folder(path);  // Recursively delete subdirectories
             } else {
-                if (unlink(path) != 0) {
+                #ifdef _WIN32
+                if (_unlink(path) != 0) {  // Use _unlink for Windows
+                #else
+                if (unlink(path) != 0) {  // Use unlink for Linux
+                #endif
                     perror("Failed to delete file");
                     log_operation("delete_folder", path, 0);  // log file deletion failure
                 } else {
@@ -43,7 +55,11 @@ void delete_folder(const char *folder_name) {
 
     closedir(dir);
 
-    if (rmdir(folder_name) != 0) {
+    #ifdef _WIN32
+    if (_rmdir(folder_name) != 0) {  // Use _rmdir for Windows
+    #else
+    if (rmdir(folder_name) != 0) {  // Use rmdir for Linux
+    #endif
         perror("Failed to delete directory");
         log_operation("delete_folder", folder_name, 0);  // log folder deletion failure
     } else {
@@ -63,7 +79,7 @@ void list_directory(const char *path) {
 
     struct dirent *entry;
     struct stat file_stat;
-    char full_path[1024];  
+    char full_path[1024];
 
     while ((entry = readdir(dir)) != NULL) {
         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
@@ -101,7 +117,13 @@ void create_file(const char *filename) {
 
 // Function to create a directory
 void create_directory(const char *dirname) {
-    if (mkdir(dirname) == -1) {  // rwx permissions for the user
+    #ifdef _WIN32
+    // Windows version of mkdir
+    if (_mkdir(dirname) != 0) {
+    #else
+    // Linux version of mkdir with permissions
+    if (mkdir(dirname, 0777) == -1) {
+    #endif
         perror("Failed to create directory");
         log_operation("create_directory", dirname, 0);  // log failure
         return;
@@ -110,5 +132,3 @@ void create_directory(const char *dirname) {
     printf("Directory '%s' created successfully.\n", dirname);
     log_operation("create_directory", dirname, 1);  // log success
 }
-
-

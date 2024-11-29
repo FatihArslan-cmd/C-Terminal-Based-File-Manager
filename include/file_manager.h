@@ -11,4 +11,5 @@ void log_operation(const char *operation, const char *details, int success);  //
 void create_file(const char *filename);
 void create_directory(const char *dirname);
 void move_file(const char *source, const char *destination);
+void display_file_content(const char *file_path);
 #endif // FILE_MANAGER_H

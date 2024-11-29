@@ -59,6 +59,8 @@ int main() {
             change_permissions(arg2, mode);  
         } else if (strcmp(arg1, "smove") == 0 && args == 3) {
             move_file(arg2, command);
+        } else if (strcmp(arg1, "sdisplay") == 0 && args == 2) {
+            display_file_content(arg2);
         } else {
             printf("Invalid command or arguments. Type 'exit' to quit.\n");
         }

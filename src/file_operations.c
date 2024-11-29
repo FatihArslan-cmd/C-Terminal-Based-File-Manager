@@ -5,6 +5,7 @@
 #include <string.h>
 #include "file_manager.h"
 
+// Function to copy a file from source to destination
 void copy_file(const char *source, const char *destination) {
     int src_fd = open(source, O_RDONLY);
     if (src_fd < 0) {
@@ -40,6 +41,8 @@ void copy_file(const char *source, const char *destination) {
     log_operation("copy_file", "File copied from source to destination", 1);  // 1 for success
     printf("File copied successfully from %s to %s.\n", source, destination);
 }
+
+// Function to move a file from source to destination
 void move_file(const char *source, const char *destination) {
     // First, try to rename the file (works within the same filesystem)
     if (rename(source, destination) == 0) {
@@ -62,4 +65,38 @@ void move_file(const char *source, const char *destination) {
     // Log the success with detailed information about the source and destination
     log_operation("move_file", "File moved from source to destination", 1);  // 1 for success
     printf("File successfully moved from %s to %s.\n", source, destination);
+}
+
+// Function to display the content of a file
+void display_file_content(const char *file_path) {
+    int fd = open(file_path, O_RDONLY);
+    if (fd < 0) {
+        perror("Failed to open the file for reading");
+        log_operation("display_file_content", "Failed to open file", 0);  // 0 for failure
+        return;
+    }
+
+    char buffer[1024];
+    ssize_t bytes_read;
+    printf("Displaying contents of %s:\n", file_path);
+    
+    while ((bytes_read = read(fd, buffer, sizeof(buffer))) > 0) {
+        if (write(STDOUT_FILENO, buffer, bytes_read) == -1) {
+            perror("Error writing to stdout");
+            log_operation("display_file_content", "Error writing to stdout", 0);  // 0 for failure
+            close(fd);
+            return;
+        }
+    }
+
+    if (bytes_read < 0) {
+        perror("Error reading the file");
+        log_operation("display_file_content", "Error reading the file", 0);  // 0 for failure
+    }
+
+    close(fd);
+    printf("\nEnd of file content.\n");
+
+    // Log the success with detailed information about the file
+    log_operation("display_file_content", "Displayed file content", 1);  // 1 for success
 }
