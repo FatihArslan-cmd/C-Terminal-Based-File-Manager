@@ -101,7 +101,7 @@ void create_file(const char *filename) {
 
 // Function to create a directory
 void create_directory(const char *dirname) {
-    if (mkdir(dirname, S_IRWXU) == -1) {  // rwx permissions for the user
+    if (mkdir(dirname) == -1) {  // rwx permissions for the user
         perror("Failed to create directory");
         log_operation("create_directory", dirname, 0);  // log failure
         return;
