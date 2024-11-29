@@ -19,5 +19,8 @@ void print_file_manager_logo() {
     printf(GREEN "- slist <directory>: " RESET "List contents of a directory.\n");
     printf(GREEN "- scopy <source> <destination>: " RESET "Copy a file.\n");
     printf(GREEN "- sremove <directory/file>: " RESET "Remove a directory or file.\n");
+    printf(GREEN "- screatefile <file>: " RESET "Create a new file.\n");
+    printf(GREEN "- screatedir <directory>: " RESET "Create a new directory.\n");
+    printf(GREEN "- sperm <file/directory> <permissions>: " RESET "Change permissions of a file or directory (755 777 644 600).\n");
     printf(GREEN "- exit: " RESET "Quit the program.\n\n");
 }
