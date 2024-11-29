@@ -1,25 +1,22 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include "file_manager_logo.h"
 #include "file_manager.h"
-void print_file_manager_logo() {
-    printf(
-    "  ___ ___ _    ___   __  __   _   _  _   _   ___ ___ ___ \n"
-    " | __|_ _| |  | __| |  \\/  | /_\\ | \\| | /_\\ / __| __| _ \\\n"
-    " | _| | || |__| _|  | |\\/| |/ _ \\| .` |/ _ \\ (_ | _||   /\n"
-    " |_| |___|____|___| |_|  |_/_/ \\_\\_|\\_/_/ \\_\\___|___|_|_\\\n"
-    "                                                         \n"
-    );
 
-    printf("\n");
-
-}
 int main() {
+    // Terminali temizle
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
+
     char command[256];
     char arg1[256], arg2[256];
     int args;
-    print_file_manager_logo();
 
-    printf("Welcome to Terminal-Based File Manager! Type 'exit' to quit.\n");
+    print_file_manager_logo(); // Logo ve açıklamalar
 
     while (1) {
         printf("> "); // Kullanıcıdan komut girişi
