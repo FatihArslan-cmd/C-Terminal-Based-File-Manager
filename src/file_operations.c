@@ -40,3 +40,26 @@ void copy_file(const char *source, const char *destination) {
     log_operation("copy_file", "File copied from source to destination", 1);  // 1 for success
     printf("File copied successfully from %s to %s.\n", source, destination);
 }
+void move_file(const char *source, const char *destination) {
+    // First, try to rename the file (works within the same filesystem)
+    if (rename(source, destination) == 0) {
+        // Log the success if rename is successful
+        log_operation("move_file", "File moved using rename", 1);  // 1 for success
+        printf("File successfully moved from %s to %s.\n", source, destination);
+        return;
+    }
+
+    // If rename fails, try copying the file and deleting the source file
+    copy_file(source, destination);  // Reuse the copy_file function
+    
+    // Now that the file is copied, remove the original source file
+    if (unlink(source) == -1) {
+        perror("Error deleting the source file");
+        log_operation("move_file", "Failed to delete the source file", 0);  // 0 for failure
+        return;
+    }
+
+    // Log the success with detailed information about the source and destination
+    log_operation("move_file", "File moved from source to destination", 1);  // 1 for success
+    printf("File successfully moved from %s to %s.\n", source, destination);
+}

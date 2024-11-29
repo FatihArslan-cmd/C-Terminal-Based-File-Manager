@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include "file_manager_logo.h"
 #include "file_manager.h"
 
@@ -50,13 +54,12 @@ int main() {
             create_file(arg2); // Create file
         } else if (strcmp(arg1, "screatedir") == 0 && args == 2) {
             create_directory(arg2); // Create directory
-        }else if (strcmp(arg1, "sperm") == 0 && args == 3) {
-          mode_t mode = strtol(command, NULL, 8);  
-          change_permissions(arg2, mode);  
-}
-
-
- else {
+        } else if (strcmp(arg1, "sperm") == 0 && args == 3) {
+            mode_t mode = strtol(command, NULL, 8);  
+            change_permissions(arg2, mode);  
+        } else if (strcmp(arg1, "smove") == 0 && args == 3) {
+            move_file(arg2, command);
+        } else {
             printf("Invalid command or arguments. Type 'exit' to quit.\n");
         }
     }
