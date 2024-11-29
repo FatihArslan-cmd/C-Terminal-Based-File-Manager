@@ -22,7 +22,6 @@ void delete_folder(const char *folder_name) {
     char path[1024];
 
     while ((entry = readdir(dir)) != NULL) {
-        // Skip "." and ".."
         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
             continue;
         }
@@ -32,10 +31,8 @@ void delete_folder(const char *folder_name) {
         struct stat stat_buf;
         if (stat(path, &stat_buf) == 0) {
             if (S_ISDIR(stat_buf.st_mode)) {
-                // Recursive call for directories
                 delete_folder(path);
             } else {
-                // Remove file
                 if (unlink(path) != 0) {
                     perror("Failed to delete file");
                 }
@@ -45,7 +42,6 @@ void delete_folder(const char *folder_name) {
 
     closedir(dir);
 
-    // Remove the empty directory
     if (rmdir(folder_name) != 0) {
         perror("Failed to delete directory");
     } else {
@@ -62,9 +58,16 @@ void list_directory(const char *path) {
 
     struct dirent *entry;
     struct stat file_stat;
+    char full_path[1024];  
 
     while ((entry = readdir(dir)) != NULL) {
-        if (stat(entry->d_name, &file_stat) == 0) {
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+            continue;
+        }
+
+        snprintf(full_path, sizeof(full_path), "%s/%s", path, entry->d_name);
+
+        if (stat(full_path, &file_stat) == 0) {
             printf("%s - %ld bytes\n", entry->d_name, file_stat.st_size);
         } else {
             perror("Error getting file info");
@@ -72,3 +75,4 @@ void list_directory(const char *path) {
     }
     closedir(dir);
 }
+
