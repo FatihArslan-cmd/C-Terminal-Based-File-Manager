@@ -2,15 +2,12 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <sys/stat.h>
-#include "file_manager.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <dirent.h>
-#include <sys/stat.h>
 #include <unistd.h>
+#include <fcntl.h>  // For creat()
+#include <string.h>  // For strcpy, strcmp
 #include "file_manager.h"
 
+// Function to delete a folder and its contents
 void delete_folder(const char *folder_name) {
     DIR *dir = opendir(folder_name);
     if (!dir) {
@@ -49,6 +46,7 @@ void delete_folder(const char *folder_name) {
     }
 }
 
+// Function to list the contents of a directory with file sizes
 void list_directory(const char *path) {
     DIR *dir = opendir(path);
     if (!dir) {
@@ -76,3 +74,28 @@ void list_directory(const char *path) {
     closedir(dir);
 }
 
+// Function to create a new file
+void create_file(const char *filename) {
+    // Using the `creat()` system call to create the file
+    int fd = creat(filename, S_IRUSR | S_IWUSR);  // rw-r--r-- permission
+    if (fd == -1) {
+        perror("Failed to create file");
+        return;
+    }
+
+    printf("File '%s' created successfully.\n", filename);
+
+    // Close the file descriptor
+    close(fd);
+}
+
+// Function to create a new directory
+void create_directory(const char *dirname) {
+    // Using the `mkdir()` system call to create a directory
+    if (mkdir(dirname, S_IRWXU) == -1) {  // rwx permissions for the user
+        perror("Failed to create directory");
+        return;
+    }
+
+    printf("Directory '%s' created successfully.\n", dirname);
+}

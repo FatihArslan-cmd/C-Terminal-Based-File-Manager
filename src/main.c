@@ -48,9 +48,13 @@ int main() {
         if (strcmp(arg1, "slist") == 0 && args == 2) {
             list_directory(arg2);
         } else if (strcmp(arg1, "scopy") == 0 && args == 3) {
-            copy_file(arg2, command); // İkinci ve üçüncü argüman
+            copy_file(arg2, command); 
         } else if (strcmp(arg1, "sremove") == 0 && args == 2) {
             delete_folder(arg2);
+        } else if (strcmp(arg1, "screatefile") == 0 && args == 2) {
+            create_file(arg2); // Create file
+        } else if (strcmp(arg1, "screatedir") == 0 && args == 2) {
+            create_directory(arg2); // Create directory
         } else {
             printf("Invalid command or arguments. Type 'exit' to quit.\n");
         }
