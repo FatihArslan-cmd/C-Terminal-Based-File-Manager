@@ -5,12 +5,7 @@
 #include "file_manager.h"
 
 int main() {
-    // Clear terminal screen
-    #ifdef _WIN32
-        system("cls");
-    #else
-        system("clear");
-    #endif
+    system("clear"); // Clears the screen on Unix/Linux 
 
     char command[256];
     char arg1[256], arg2[256];
@@ -57,7 +52,7 @@ int main() {
             create_directory(arg2); // Create directory
         }else if (strcmp(arg1, "sperm") == 0 && args == 3) {
           mode_t mode = strtol(command, NULL, 8);  
-          change_permissions(arg2, mode);  /
+          change_permissions(arg2, mode);  
 }
 
 

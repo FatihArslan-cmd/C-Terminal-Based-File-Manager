@@ -7,7 +7,8 @@ void list_directory(const char *path);
 void copy_file(const char *source, const char *destination);
 void delete_folder(const char *folder_name);
 void change_permissions(const char *path, mode_t mode);
-void log_operation(const char *operation, const char *details, int success);
+void log_operation(const char *operation, const char *details, int success);  // Keep this declaration only once
 void create_file(const char *filename);
 void create_directory(const char *dirname);
+
 #endif // FILE_MANAGER_H
