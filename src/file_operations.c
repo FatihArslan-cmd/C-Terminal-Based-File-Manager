@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <dirent.h>  // Include directory handling
 #include "file_manager.h"
 
 // Function to copy a file from source to destination
@@ -95,8 +96,41 @@ void display_file_content(const char *file_path) {
     }
 
     close(fd);
-    printf("\nEnd of file content.\n");
 
     // Log the success with detailed information about the file
     log_operation("display_file_content", "Displayed file content", 1);  // 1 for success
 }
+
+// Function to search for a string within a directory
+void search_files_in_directory(const char *directory_path, const char *search_string) {
+    DIR *dir = opendir(directory_path);
+    if (!dir) {
+        perror("Unable to open directory");
+        log_operation("search_files_in_directory", "Failed to open directory", 0);  // 0 for failure
+        return;
+    }
+
+    struct dirent *entry;
+    int found = 0; // Eşleşen dosya bulunup bulunmadığını kontrol için
+
+    printf("Searching for '%s' in directory: %s\n**\n", search_string, directory_path); // İki yıldız ekledik
+
+    while ((entry = readdir(dir)) != NULL) {
+        // Check if the entry is a file (not a directory)
+        if (entry->d_type == DT_REG) {
+            if (strstr(entry->d_name, search_string) != NULL) {
+                printf("Found file: %s\n", entry->d_name);
+                log_operation("search_files_in_directory", "Found file matching search string", 1);  // 1 for success
+                found = 1; // Dosya bulundu
+            }
+        }
+    }
+
+    if (!found) {
+        printf("No files matching '%s' were found in the directory.\n", search_string);
+        log_operation("search_files_in_directory", "No files matched search string", 0);  // 0 for failure
+    }
+
+    closedir(dir);
+}
+

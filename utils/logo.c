@@ -22,6 +22,8 @@ void print_file_manager_logo() {
     printf(GREEN "- screatefile <file>: " RESET "Create a new file.\n");
     printf(GREEN "- screatedir <directory>: " RESET "Create a new directory.\n");
     printf(GREEN "- sperm <file/directory> <permissions>: " RESET "Change permissions of a file or directory (755 777 644 600).\n");
-    printf(GREEN "- smove <source> <destination>: " RESET "Move a file (rename or copy and delete).\n");  // Added smove description
+    printf(GREEN "- smove <source> <destination>: " RESET "Move a file (rename or copy and delete).\n"); 
+    printf(GREEN "- sdisplay <file>: " RESET "Display the contents of a file.\n");
+    printf(GREEN "- ssearch <directory> <file>: " RESET "Search for a specific file in a directory.\n");
     printf(GREEN "- exit: " RESET "Quit the program.\n\n");
 }
