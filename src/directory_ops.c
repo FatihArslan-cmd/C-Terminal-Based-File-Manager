@@ -70,18 +70,20 @@ void delete_folder(const char *folder_name) {
 
 // Function to list directory contents
 void list_directory(const char *path) {
-    const char *directory_path = path && strlen(path) > 0 ? path : "."; // Default to current directory if path is NULL or empty
-
+    const char *directory_path = path && strlen(path) > 0 ? path : ".";
     DIR *dir = opendir(directory_path);
     if (!dir) {
         perror("Unable to open directory");
-        log_operation("list_directory", "Failed to open directory", 0);  // log failure
+        log_operation("list_directory", "Failed to open directory", 0);
         return;
     }
 
     struct dirent *entry;
     struct stat file_stat;
     char full_path[1024];
+
+    printf("Name\t\tType\t\tSize (bytes)\tPermissions\n");
+    printf("---------------------------------------------------------------\n");
 
     while ((entry = readdir(dir)) != NULL) {
         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
@@ -91,15 +93,22 @@ void list_directory(const char *path) {
         snprintf(full_path, sizeof(full_path), "%s/%s", directory_path, entry->d_name);
 
         if (stat(full_path, &file_stat) == 0) {
-            printf("%s - %ld bytes\n", entry->d_name, file_stat.st_size);
+            char *file_type = "Unknown";
+            if (S_ISREG(file_stat.st_mode)) file_type = "File";
+            else if (S_ISDIR(file_stat.st_mode)) file_type = "Directory";
+            else if (S_ISLNK(file_stat.st_mode)) file_type = "Link";
+
+            printf("%-15s %-15s %-12ld ", entry->d_name, file_type, file_stat.st_size);
+            print_permissions(file_stat.st_mode);
+            printf("\n");
         } else {
             perror("Error getting file info");
-            log_operation("list_directory", full_path, 0);  // log failure
+            log_operation("list_directory", full_path, 0);
         }
     }
 
     closedir(dir);
-    log_operation("list_directory", directory_path, 1);  // log success
+    log_operation("list_directory", directory_path, 1);
 }
 
 

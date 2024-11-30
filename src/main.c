@@ -58,7 +58,7 @@ int main() {
         } else if (strcmp(arg1, "sremovefolder") == 0 && args == 2) {
             delete_folder(arg2);
         }
-        else if (strcmp(arg1, "sdeletefile") == 0 && args == 2) { // Delete file
+        else if (strcmp(arg1, "sremovefile") == 0 && args == 2) { // Delete file
             delete_file(arg2);
         } else if (strcmp(arg1, "screatefile") == 0 && args == 2) {
             create_file(arg2); // Create file
