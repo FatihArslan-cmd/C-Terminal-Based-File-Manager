@@ -16,6 +16,7 @@ void print_file_manager_logo() {
 
     printf(BLUE "Welcome to Terminal-Based File Manager!\n" RESET);
     printf("You can use the following commands:\n");
+    printf(GREEN "- spwd : " RESET "Path of current working directory.\n");
     printf(GREEN "- slist <directory>: " RESET "List contents of a directory.\n");
     printf(GREEN "- scopy <source> <destination>: " RESET "Copy a file.\n");
     printf(GREEN "- sremove <directory/file>: " RESET "Remove a directory or file.\n");

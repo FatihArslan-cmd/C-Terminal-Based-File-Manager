@@ -68,9 +68,10 @@ void delete_folder(const char *folder_name) {
     }
 }
 
-// Function to list directory contents
 void list_directory(const char *path) {
-    DIR *dir = opendir(path);
+    const char *directory_path = path && strlen(path) > 0 ? path : "."; // Default to current directory if path is NULL or empty
+
+    DIR *dir = opendir(directory_path);
     if (!dir) {
         perror("Unable to open directory");
         log_operation("list_directory", "Failed to open directory", 0);  // log failure
@@ -86,7 +87,7 @@ void list_directory(const char *path) {
             continue;
         }
 
-        snprintf(full_path, sizeof(full_path), "%s/%s", path, entry->d_name);
+        snprintf(full_path, sizeof(full_path), "%s/%s", directory_path, entry->d_name);
 
         if (stat(full_path, &file_stat) == 0) {
             printf("%s - %ld bytes\n", entry->d_name, file_stat.st_size);
@@ -97,8 +98,9 @@ void list_directory(const char *path) {
     }
 
     closedir(dir);
-    log_operation("list_directory", path, 1);  // log success
+    log_operation("list_directory", directory_path, 1);  // log success
 }
+
 
 // Function to create a file
 void create_file(const char *filename) {
@@ -131,4 +133,15 @@ void create_directory(const char *dirname) {
 
     printf("Directory '%s' created successfully.\n", dirname);
     log_operation("create_directory", dirname, 1);  // log success
+}
+// Function to print the current working directory
+void print_working_directory() {
+    char cwd[1024];  // Buffer to store the current working directory
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        printf("Current Working Directory: %s\n", cwd);
+        log_operation("print_working_directory", cwd, 1);  // log success
+    } else {
+        perror("Failed to get current working directory");
+        log_operation("print_working_directory", "Failed to get cwd", 0);  // log failure
+    }
 }

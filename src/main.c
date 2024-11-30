@@ -44,8 +44,15 @@ int main() {
         }
 
         // Process commands
-        if (strcmp(arg1, "slist") == 0 && args == 2) {
-            list_directory(arg2);
+        if (strcmp(arg1, "slist") == 0) {
+    if (args == 2) {
+        list_directory(arg2); // Kullanıcı path girdiyse onu kullan
+    } else if (args == 1) {
+        list_directory("."); // Varsayılan olarak mevcut dizin
+    } 
+       }
+       else if (strcmp(arg1, "spwd") == 0 && args == 1) { 
+            print_working_directory(); // Print working directory
         } else if (strcmp(arg1, "scopy") == 0 && args == 3) {
             copy_file(arg2, arg3);
         } else if (strcmp(arg1, "sremove") == 0 && args == 2) {
