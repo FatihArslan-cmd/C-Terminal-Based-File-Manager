@@ -28,6 +28,36 @@ void delete_folder(const char *folder_name) {
 
     struct dirent *entry;
     char path[1024];
+    int has_files = 0;  // Dizinin içeriğini kontrol etmek için flag
+
+    // Önce dizinin içeriğini kontrol et
+    while ((entry = readdir(dir)) != NULL) {
+        if (strcmp(entry->d_name, ".") != 0 && strcmp(entry->d_name, "..") != 0) {
+            has_files = 1;  // Dizinin içinde başka dosya veya klasör var
+            break;
+        }
+    }
+
+    closedir(dir);
+
+    if (has_files) {
+        printf("Folder '%s' contains files or directories. Do you want to proceed with deletion? (yes/no): ", folder_name);
+        char response[4];
+        scanf("%3s", response);
+        if (strcasecmp(response, "yes") != 0) {
+            printf("Deletion aborted for folder '%s'.\n", folder_name);
+            log_operation("delete_folder", "Deletion aborted by user", 0);
+            return;
+        }
+    }
+
+    // Yeniden aç ve içerikleri sil
+    dir = opendir(folder_name);
+    if (!dir) {
+        perror("Unable to open directory after confirmation");
+        log_operation("delete_folder", "Failed to open directory after confirmation", 0);
+        return;
+    }
 
     while ((entry = readdir(dir)) != NULL) {
         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
@@ -39,13 +69,13 @@ void delete_folder(const char *folder_name) {
         struct stat stat_buf;
         if (stat(path, &stat_buf) == 0) {
             if (S_ISDIR(stat_buf.st_mode)) {
-                delete_folder(path);  // Recursively delete subdirectories
+                delete_folder(path);  // Rekürsif olarak alt dizinleri sil
             } else {
-                if (unlink(path) != 0) {  // Use unlink for both platforms
+                if (unlink(path) != 0) {  // unlink ile dosyaları sil
                     perror("Failed to delete file");
-                    log_operation("delete_folder", path, 0);  // log file deletion failure
+                    log_operation("delete_folder", path, 0);
                 } else {
-                    log_operation("delete_folder", path, 1);  // log file deletion success
+                    log_operation("delete_folder", path, 1);
                 }
             }
         }
@@ -53,12 +83,12 @@ void delete_folder(const char *folder_name) {
 
     closedir(dir);
 
-    if (rmdir(folder_name) != 0) {  // Use rmdir for both platforms
+    if (rmdir(folder_name) != 0) {  // rmdir ile dizini sil
         perror("Failed to delete directory");
-        log_operation("delete_folder", folder_name, 0);  // log folder deletion failure
+        log_operation("delete_folder", folder_name, 0);
     } else {
         printf("Deleted folder: %s\n", folder_name);
-        log_operation("delete_folder", folder_name, 1);  // log folder deletion success
+        log_operation("delete_folder", folder_name, 1);
     }
 }
 

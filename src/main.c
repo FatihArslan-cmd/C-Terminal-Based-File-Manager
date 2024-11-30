@@ -22,6 +22,7 @@ int main() {
     while (1) {
         printf("> "); // Prompt for user input
         fflush(stdout);
+         memset(command, 0, sizeof(command));
 
         // Read command and arguments from user
         if (fgets(command, sizeof(command), stdin) == NULL) {
@@ -60,7 +61,7 @@ void process_command(const char *command) {
         print_working_directory();
     } else if (strcmp(arg1, "scopy") == 0 && args == 3) {
         copy_file(arg2, arg3);
-    } else if (strcmp(arg1, "sremovefolder") == 0 && args == 2) {
+    } else if (strcmp(arg1, "sremovefolder") == 0 && args >= 2) {  // 'fatih' argümanı var mı
         delete_folder(arg2);
     } else if (strcmp(arg1, "sremovefile") == 0 && args == 2) {
         delete_file(arg2);
@@ -77,13 +78,13 @@ void process_command(const char *command) {
         display_file_content(arg2);
     } else if (strcmp(arg1, "ssearch") == 0 && args == 3) {
         search_files_in_directory(arg2, arg3);
-    } 
-    else if (strcmp(arg1, "sclear") == 0 && args == 1) {
-        clear_screen(); // Clears the console
-    }else {
+    } else if (strcmp(arg1, "sclear") == 0 && args == 1) {
+        clear_screen();
+    } else {
         print_invalid_command();
     }
 }
+
 
 void print_invalid_command() {
     printf("Invalid command or arguments. Type 'exit' to quit.\n");
