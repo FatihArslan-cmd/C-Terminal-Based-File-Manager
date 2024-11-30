@@ -68,6 +68,7 @@ void delete_folder(const char *folder_name) {
     }
 }
 
+// Function to list directory contents
 void list_directory(const char *path) {
     const char *directory_path = path && strlen(path) > 0 ? path : "."; // Default to current directory if path is NULL or empty
 
@@ -134,7 +135,25 @@ void create_directory(const char *dirname) {
     printf("Directory '%s' created successfully.\n", dirname);
     log_operation("create_directory", dirname, 1);  // log success
 }
-// Function to print the current working directory
+void delete_file(const char *file_name) {
+    if (file_name == NULL || strlen(file_name) == 0) {
+        printf("Invalid file name.\n");
+        log_operation("delete_file", "Invalid file name", 0);
+        return;
+    }
+
+    #ifdef _WIN32
+    if (_unlink(file_name) != 0) {  // Windows için _unlink
+    #else
+    if (unlink(file_name) != 0) {  // Linux/macOS için unlink
+    #endif
+        perror("Failed to delete file");
+        log_operation("delete_file", file_name, 0);  // Başarısızlığı logla
+    } else {
+        printf("Deleted file: %s\n", file_name);
+        log_operation("delete_file", file_name, 1);  // Başarıyı logla
+    }
+}
 void print_working_directory() {
     char cwd[1024];  // Buffer to store the current working directory
     if (getcwd(cwd, sizeof(cwd)) != NULL) {

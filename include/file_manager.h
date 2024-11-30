@@ -14,4 +14,5 @@ void move_file(const char *source, const char *destination);
 void display_file_content(const char *file_path);
 void search_files_in_directory(const char *directory_path, const char *search_string);
 void print_working_directory();
+void delete_file(const char *file_name);
 #endif // FILE_MANAGER_H

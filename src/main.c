@@ -55,8 +55,11 @@ int main() {
             print_working_directory(); // Print working directory
         } else if (strcmp(arg1, "scopy") == 0 && args == 3) {
             copy_file(arg2, arg3);
-        } else if (strcmp(arg1, "sremove") == 0 && args == 2) {
+        } else if (strcmp(arg1, "sremovefolder") == 0 && args == 2) {
             delete_folder(arg2);
+        }
+        else if (strcmp(arg1, "sdeletefile") == 0 && args == 2) { // Delete file
+            delete_file(arg2);
         } else if (strcmp(arg1, "screatefile") == 0 && args == 2) {
             create_file(arg2); // Create file
         } else if (strcmp(arg1, "screatedir") == 0 && args == 2) {
