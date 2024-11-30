@@ -6,6 +6,7 @@
 #include <fcntl.h>  
 #include <string.h>  
 #include "file_manager.h"
+#include "file_manager_logo.h"
 
 #ifdef _WIN32
 #include <direct.h>  
@@ -170,4 +171,15 @@ void print_working_directory() {
         perror("Failed to get current working directory");
         log_operation("print_working_directory", "Failed to get cwd", 0);  // log failure
     }
+}
+// Function to clear the console screen
+void clear_screen() {
+#ifdef _WIN32
+    system("cls");  // Windows için konsol temizleme
+    print_file_manager_logo(); // Logo and description
+#else
+    system("clear");  // Linux/Unix için konsol temizleme
+    print_file_manager_logo(); // Logo and description
+#endif
+    log_operation("clear_screen", "Cleared console screen", 1);  // log success
 }

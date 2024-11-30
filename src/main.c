@@ -77,7 +77,10 @@ void process_command(const char *command) {
         display_file_content(arg2);
     } else if (strcmp(arg1, "ssearch") == 0 && args == 3) {
         search_files_in_directory(arg2, arg3);
-    } else {
+    } 
+    else if (strcmp(arg1, "sclear") == 0 && args == 1) {
+        clear_screen(); // Clears the console
+    }else {
         print_invalid_command();
     }
 }

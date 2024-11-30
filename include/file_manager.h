@@ -16,4 +16,5 @@ void search_files_in_directory(const char *directory_path, const char *search_st
 void print_working_directory();
 void delete_file(const char *file_name);
 void print_permissions(mode_t mode);
+void clear_screen();
 #endif 

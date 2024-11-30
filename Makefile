@@ -5,7 +5,7 @@ BINDIR = bin
 INCDIR = include
 UTILS = utils
 
-SOURCES = $(SRCDIR)/main.c $(SRCDIR)/log_operations.c $(SRCDIR)/file_operations.c $(SRCDIR)/directory_ops.c $(SRCDIR)/permissions.c $(UTILS)/logo.c
+SOURCES = $(SRCDIR)/main.c $(SRCDIR)/logger.c $(SRCDIR)/file_operations.c $(SRCDIR)/directory_ops.c $(SRCDIR)/permissions.c $(UTILS)/logo.c
 OBJECTS = $(SOURCES:.c=.o)
 EXECUTABLE = file_manager
 

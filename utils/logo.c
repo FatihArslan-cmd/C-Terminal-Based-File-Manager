@@ -28,5 +28,6 @@ void print_file_manager_logo() {
     printf(GREEN "- smove " YELLOW "<source> <destination>" RESET ": Move a file (rename supported).\n");
     printf(GREEN "- sdisplay " YELLOW "<file>" RESET ": Display the contents of a file.\n");
     printf(GREEN "- ssearch " YELLOW "<directory> <file>" RESET ": Search for a specific file in a directory.\n");
+    printf(GREEN "- sclear " RESET ": Clear the commands\n");
     printf(GREEN "- exit: " RESET "Quit the program.\n\n");
 }
