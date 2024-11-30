@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
-#include <dirent.h>  // Include directory handling
+#include <dirent.h> 
 #include "file_manager.h"
 
 // Function to copy a file from source to destination
@@ -43,6 +43,8 @@ void copy_file(const char *source, const char *destination) {
     printf("File copied successfully from %s to %s.\n", source, destination);
 }
 
+
+
 // Function to move a file from source to destination
 void move_file(const char *source, const char *destination) {
     // First, try to rename the file (works within the same filesystem)
@@ -67,6 +69,8 @@ void move_file(const char *source, const char *destination) {
     log_operation("move_file", "File moved from source to destination", 1);  // 1 for success
     printf("File successfully moved from %s to %s.\n", source, destination);
 }
+
+
 
 // Function to display the content of a file
 void display_file_content(const char *file_path) {
@@ -101,6 +105,8 @@ void display_file_content(const char *file_path) {
     log_operation("display_file_content", "Displayed file content", 1);  // 1 for success
 }
 
+
+
 // Function to search for a string within a directory
 void search_files_in_directory(const char *directory_path, const char *search_string) {
     DIR *dir = opendir(directory_path);
@@ -111,9 +117,9 @@ void search_files_in_directory(const char *directory_path, const char *search_st
     }
 
     struct dirent *entry;
-    int found = 0; // Eşleşen dosya bulunup bulunmadığını kontrol için
+    int found = 0; //check if there is matched files
 
-    printf("Searching for '%s' in directory: %s\n**\n", search_string, directory_path); // İki yıldız ekledik
+    printf("Searching for '%s' in directory: %s\n**\n", search_string, directory_path); 
 
     while ((entry = readdir(dir)) != NULL) {
         // Check if the entry is a file (not a directory)

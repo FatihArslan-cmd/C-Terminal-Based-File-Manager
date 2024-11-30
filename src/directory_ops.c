@@ -3,17 +3,18 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <fcntl.h>  // For creat()
-#include <string.h>  // For strcpy, strcmp
+#include <fcntl.h>  
+#include <string.h>  
 #include "file_manager.h"
 
 #ifdef _WIN32
-#include <direct.h>  // For _mkdir on Windows
-#include <io.h>      // For _unlink on Windows
+#include <direct.h>  
+#include <io.h>      
 #else
 #include <sys/types.h>
 #include <sys/stat.h>
 #endif
+
 
 // Function to delete folder and its contents recursively
 void delete_folder(const char *folder_name) {
@@ -39,11 +40,7 @@ void delete_folder(const char *folder_name) {
             if (S_ISDIR(stat_buf.st_mode)) {
                 delete_folder(path);  // Recursively delete subdirectories
             } else {
-                #ifdef _WIN32
-                if (_unlink(path) != 0) {  // Use _unlink for Windows
-                #else
-                if (unlink(path) != 0) {  // Use unlink for Linux
-                #endif
+                if (unlink(path) != 0) {  // Use unlink for both platforms
                     perror("Failed to delete file");
                     log_operation("delete_folder", path, 0);  // log file deletion failure
                 } else {
@@ -55,11 +52,7 @@ void delete_folder(const char *folder_name) {
 
     closedir(dir);
 
-    #ifdef _WIN32
-    if (_rmdir(folder_name) != 0) {  // Use _rmdir for Windows
-    #else
-    if (rmdir(folder_name) != 0) {  // Use rmdir for Linux
-    #endif
+    if (rmdir(folder_name) != 0) {  // Use rmdir for both platforms
         perror("Failed to delete directory");
         log_operation("delete_folder", folder_name, 0);  // log folder deletion failure
     } else {
@@ -67,6 +60,8 @@ void delete_folder(const char *folder_name) {
         log_operation("delete_folder", folder_name, 1);  // log folder deletion success
     }
 }
+
+
 
 // Function to list directory contents
 void list_directory(const char *path) {
@@ -112,6 +107,7 @@ void list_directory(const char *path) {
 }
 
 
+
 // Function to create a file
 void create_file(const char *filename) {
     int fd = creat(filename, S_IRUSR | S_IWUSR);  // rw-r--r-- permission
@@ -144,6 +140,9 @@ void create_directory(const char *dirname) {
     printf("Directory '%s' created successfully.\n", dirname);
     log_operation("create_directory", dirname, 1);  // log success
 }
+
+
+
 void delete_file(const char *file_name) {
     if (file_name == NULL || strlen(file_name) == 0) {
         printf("Invalid file name.\n");
@@ -151,18 +150,17 @@ void delete_file(const char *file_name) {
         return;
     }
 
-    #ifdef _WIN32
-    if (_unlink(file_name) != 0) {  // Windows için _unlink
-    #else
-    if (unlink(file_name) != 0) {  // Linux/macOS için unlink
-    #endif
+    if (unlink(file_name) != 0) {  
         perror("Failed to delete file");
-        log_operation("delete_file", file_name, 0);  // Başarısızlığı logla
+        log_operation("delete_file", file_name, 0);  
     } else {
         printf("Deleted file: %s\n", file_name);
-        log_operation("delete_file", file_name, 1);  // Başarıyı logla
+        log_operation("delete_file", file_name, 1);  
     }
 }
+
+
+
 void print_working_directory() {
     char cwd[1024];  // Buffer to store the current working directory
     if (getcwd(cwd, sizeof(cwd)) != NULL) {

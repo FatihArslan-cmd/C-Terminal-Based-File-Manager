@@ -24,7 +24,7 @@ void print_file_manager_logo() {
     printf(GREEN "- sremovefile " YELLOW "<file>" RESET ": Remove a file.\n");
     printf(GREEN "- screatefile " YELLOW "<file>" RESET ": Create a new file.\n");
     printf(GREEN "- screatedir " YELLOW "<directory>" RESET ": Create a new directory.\n");
-    printf(GREEN "- sperm " YELLOW "<file/directory> <permissions>" RESET ": Change permissions of a file or directory (755 777 644 600).\n");
+    printf(GREEN "- spermission " YELLOW "<file/directory> <permissions>" RESET ": Change permissions of a file or directory (755 777 644 600).\n");
     printf(GREEN "- smove " YELLOW "<source> <destination>" RESET ": Move a file (rename supported).\n");
     printf(GREEN "- sdisplay " YELLOW "<file>" RESET ": Display the contents of a file.\n");
     printf(GREEN "- ssearch " YELLOW "<directory> <file>" RESET ": Search for a specific file in a directory.\n");
