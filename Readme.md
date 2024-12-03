@@ -3,7 +3,7 @@
 A robust and secure terminal-based file manager written in C, providing essential file and directory management operations with comprehensive error handling and user-friendly interface.
 <br>
 <p align="center"> 
-<img src="https://github.com/user-attachments/assets/bb0678f9-58a9-4dca-8c3e-fb31ec376141" width="500" alt="Screenshot 1"/>
+<img src="https://github.com/user-attachments/assets/bb0678f9-58a9-4dca-8c3e-fb31ec376141" width="800" alt="Screenshot 1"/>
  </p>
 ## Features
 
