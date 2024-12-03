@@ -1,82 +1,35 @@
 #include <stdio.h>
 #include <sys/stat.h>
-#include <string.h>
-#include <errno.h>
 #include "file_manager.h"
 
-// Helper function to validate permission mode
-static int validate_mode(mode_t mode) {
-    // Check if mode is within valid octal range (000-777)
-    return (mode >= 0 && mode <= 0777);
-}
-
-// Helper function to check if a path exists
-static int path_exists(const char *path) {
-    struct stat st;
-    return stat(path, &st) == 0;
-}
-
-// Function to change file/directory permissions
 void change_permissions(const char *path, mode_t mode) {
-    if (!path) {
-        fprintf(stderr, "Error: Invalid path\n");
-        log_operation("change_permissions", "Invalid path", 0);
-        return;
-    }
-
-    // Check if path exists
-    if (!path_exists(path)) {
-        fprintf(stderr, "Error: Path '%s' does not exist\n", path);
-        log_operation("change_permissions", "Path does not exist", 0);
-        return;
-    }
-
-    // Validate permission mode
-    if (!validate_mode(mode)) {
-        fprintf(stderr, "Error: Invalid permission mode (must be between 000 and 777)\n");
-        log_operation("change_permissions", "Invalid permission mode", 0);
-        return;
-    }
-
-    // Get current permissions
-    struct stat st;
-    if (stat(path, &st) == 0) {
-        mode_t old_mode = st.st_mode & 0777;
-        
-        // Change permissions
-        if (chmod(path, mode) == 0) {
-            printf("Permissions changed for '%s':\n", path);
-            printf("  Old permissions: ");
-            print_permissions(old_mode);
-            printf(" (%03o)\n", old_mode);
-            printf("  New permissions: ");
-            print_permissions(mode);
-            printf(" (%03o)\n", mode);
-            
-            log_operation("change_permissions", "Permissions changed successfully", 1);
-        } else {
-            perror("Error changing permissions");
-            log_operation("change_permissions", strerror(errno), 0);
-        }
+    if (chmod(path, mode) == 0) {
+        printf("Permissions changed successfully for '%s'.\n", path);
+        log_operation("change_permissions", path, 1);  // 1 for success
     } else {
-        perror("Error getting file information");
-        log_operation("change_permissions", "Failed to get file information", 0);
+        perror("Failed to change permissions");
+        log_operation("change_permissions", path, 0);  // 0 for failure
     }
 }
 
-// Function to print permissions in human-readable format
 void print_permissions(mode_t mode) {
-    const char *rwx[] = {"---", "--x", "-w-", "-wx", "r--", "r-x", "rw-", "rwx"};
-    char perms[10];
+    char perms[10] = "---------";
+//for Owner permissions does not warn in Windows
+    if (mode & S_IRUSR) perms[0] = 'r';
+    if (mode & S_IWUSR) perms[1] = 'w';
+    if (mode & S_IXUSR) perms[2] = 'x';
 
-    // Owner permissions
-    strcpy(perms, rwx[(mode >> 6) & 0x7]);
-    
-    // Group permissions
-    strcat(perms, rwx[(mode >> 3) & 0x7]);
-    
-    // Others permissions
-    strcat(perms, rwx[mode & 0x7]);
+//for group permissions warns in Windows works perfectly in Linux
+
+    if (mode & S_IRGRP) perms[3] = 'r';
+    if (mode & S_IWGRP) perms[4] = 'w';
+    if (mode & S_IXGRP) perms[5] = 'x';
+
+//for other permission warns in Windows works perfectly in Linux
+ 
+    if (mode & S_IROTH) perms[6] = 'r';
+    if (mode & S_IWOTH) perms[7] = 'w';
+    if (mode & S_IXOTH) perms[8] = 'x';
 
     printf("%s", perms);
 }
