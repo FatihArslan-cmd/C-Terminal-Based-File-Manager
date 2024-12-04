@@ -50,6 +50,7 @@ void process_command(const char *command) {
     char arg1[256], arg2[256], arg3[256];
     int args = sscanf(command, "%s %s %s", arg1, arg2, arg3);
 
+//Examine conditions
     if (args < 1) {
         print_invalid_command();
         return;
